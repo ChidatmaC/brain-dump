@@ -1,26 +1,103 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-deep: #05070c;
+  --bg-blue: #0b2748;
+  --bg-slate: #3a4454;
+  --ink: #e8eef7;
+  --ink-muted: #9aabbf;
+  --bubble: rgba(180, 205, 235, 0.14);
+  --bubble-border: rgba(200, 220, 245, 0.28);
+  --bubble-solid: rgb(10, 18, 32);
+  --brain-fill: rgba(90, 130, 180, 0.18);
+  --brain-stroke: rgba(170, 200, 235, 0.55);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-background: var(--bg-deep);
+  --color-foreground: var(--ink);
+  --font-sans: var(--font-outfit);
+  --font-display: var(--font-syne);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-deep);
+  color: var(--ink);
+  font-family: var(--font-outfit), sans-serif;
+}
+
+@keyframes gradient-drift {
+  0%,
+  100% {
+    background-position: 0% 40%;
+  }
+  50% {
+    background-position: 100% 60%;
+  }
+}
+
+@keyframes brain-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.015);
+    opacity: 0.92;
+  }
+}
+
+@keyframes bubble-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes soft-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.page-gradient {
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 15%, #1a4a7a 0%, transparent 55%),
+    radial-gradient(ellipse 70% 50% at 85% 75%, #2a3444 0%, transparent 50%),
+    linear-gradient(145deg, #05070c 0%, #0b2748 42%, #1c2430 72%, #05070c 100%);
+  background-size: 140% 140%;
+  animation: gradient-drift 22s ease-in-out infinite;
+}
+
+@keyframes neuron-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.task-float {
+  animation: soft-float 5.5s ease-in-out infinite;
+}
+
+.task-card {
+  animation: bubble-rise 0.55s ease-out both;
+  height: 100%;
+  width: 100%;
+}
+
+.neuron-link {
+  animation: neuron-pulse 4.5s ease-in-out infinite;
 }

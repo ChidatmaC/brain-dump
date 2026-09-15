@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  turbopack: {
+    root: __dirname, // force workspace root to the brain-dump folder
+  },
 };
 
 export default nextConfig;
