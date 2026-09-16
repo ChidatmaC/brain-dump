@@ -6,7 +6,7 @@ export type Task = {
   id: string;
   title: string | null;
   content: string;
-  createdAt: Date;
+  createdAt: string;
 };
 
 type PlacedTask = Task & {
