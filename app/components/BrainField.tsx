@@ -270,6 +270,10 @@ export function BrainField({ initialTasks }: BrainFieldProps) {
           }),
         });
 
+        if (res.status === 401) {
+          window.location.href = "/login";
+          return;
+        }
         if (!res.ok) throw new Error("Failed to create task");
 
         const saved = (await res.json()) as {
@@ -304,7 +308,7 @@ export function BrainField({ initialTasks }: BrainFieldProps) {
 
   async function handleDelete(taskId: string) {
     try{
-      const res = await fetch("api/tasks/", {
+      const res = await fetch("/api/tasks", {
         method: "DELETE", 
         headers: {
           "Content-Type": "application/json",
@@ -312,6 +316,10 @@ export function BrainField({ initialTasks }: BrainFieldProps) {
         body: JSON.stringify({id: taskId}),
       });
 
+      if (res.status === 401) {
+        window.location.href = "/login";
+        return;
+      }
       if(!res.ok){
         throw new Error("Failed to delete task");
       }
