@@ -21,6 +21,7 @@ export default async function Home() {
       id: task.id,
       title: task.title,
       content: task.content,
+      category: task.category,
       createdAt: task.createdAt.toISOString(),
     }));
   } catch {

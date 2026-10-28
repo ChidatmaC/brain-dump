@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSessionUserId } from "@/lib/auth";
+import { categorizeTask, existingCategories } from "@/lib/categorize";
 
 function unauthorized() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -28,11 +29,18 @@ export async function POST(request: Request) {
 
     try{
         const body = await request.json();
+        const title = body.title || null;
+
+        const category = await categorizeTask(
+            { title, content: body.content },
+            await existingCategories(userId),
+        );
 
         const newTask = await prisma.task.create({
             data: {
-                title: body.title || null,
+                title,
                 content: body.content,
+                category,
                 userId,
             },
         });  
@@ -73,6 +81,18 @@ export async function PUT(request: Request) {
 
     try{
         const body = await request.json();
+        const title = body.title || null;
+
+        const existing = await prisma.task.findFirst({ where: { id: body.id, userId } });
+        if (!existing) {
+            return NextResponse.json({ error: "Task not found" }, { status: 404 });
+        }
+
+        // Only re-label when the text actually changed
+        const textChanged = existing.title !== title || existing.content !== body.content;
+        const category = textChanged
+            ? await categorizeTask({ title, content: body.content }, await existingCategories(userId))
+            : existing.category;
 
         const { count } = await prisma.task.updateMany({
             where: {
@@ -80,8 +100,9 @@ export async function PUT(request: Request) {
                 userId,
             },
             data: {
-                title: body.title || null,
+                title,
                 content: body.content,
+                category,
             },
         });
         if (count === 0) {
