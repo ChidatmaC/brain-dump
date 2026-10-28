@@ -20,6 +20,7 @@ model Task {
   title     String?
   content   String
   createdAt DateTime @default(now())
+  category  String?
   userId    String?
   user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
